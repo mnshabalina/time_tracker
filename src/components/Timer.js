@@ -41,12 +41,7 @@ class Timer extends React.Component {
     }
 
     onBook = () =>{
-        clearInterval(this.deltaUpdater);
-        const on = false;
-        const started = false;
-        const delta = 0;
-        const initial_delta = 0;
-        this.setState({on, started, delta, initial_delta});
+        this.onReset()
         // show booking component
     }
 
@@ -59,20 +54,13 @@ class Timer extends React.Component {
         this.setState({on, started, delta, initial_delta})
     }
 
-    onResume = () =>{
-        const start = new Date();
-        const on = true;
-        this.setDeltaUpdater();
-        this.setState({on, start})
-    }
-
     mainButton = () => {
         let button;
         if (this.state.on)
             button = {text:'Reset', handler:this.onReset}
         else {
             if (this.state.started)
-                button = {text:'Resume', handler:this.onResume}
+                button = {text:'Resume', handler:this.onStart}
             else
                 button = {text:'Start', handler:this.onStart}
         }
