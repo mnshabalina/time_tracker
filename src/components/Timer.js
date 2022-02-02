@@ -1,5 +1,6 @@
 import React from 'react';
 import { delta_to_str } from '../utils/date_utils';
+import BookForm from './BookForm';
 
 class Timer extends React.Component {
 
@@ -10,15 +11,19 @@ class Timer extends React.Component {
         const started = false;
         const start = 0;
         const delta = 0;
+        const delta_str = '00:00:00';
         const initial_delta = 0;
+        const booking = false;
+        const booking_duration = '00:00:00';
         
-        this.state = {on, started, start, delta, initial_delta};
+        this.state = {on, started, start, delta, delta_str, initial_delta, booking, booking_duration};
     }
 
     updateDelta = () => {
         const now = new Date();
         const delta = (now - this.state.start) + this.state.initial_delta;
-        this.setState({delta});
+        const delta_str = delta_to_str(delta)
+        this.setState({delta, delta_str});
     }
 
     setDeltaUpdater = () => {
@@ -41,8 +46,10 @@ class Timer extends React.Component {
     }
 
     onBook = () =>{
-        this.onReset()
-        // show booking component
+        const booking = true;
+        const booking_duration = this.state.delta_str;
+        this.setState({booking, booking_duration});
+        this.onReset();
     }
 
     onReset = () =>{
@@ -56,6 +63,7 @@ class Timer extends React.Component {
 
     mainButton = () => {
         let button;
+        const className = `ui button ${this.state.booking ? 'disabled': ''}`;
         if (this.state.on)
             button = {text:'Reset', handler:this.onReset}
         else {
@@ -65,21 +73,22 @@ class Timer extends React.Component {
                 button = {text:'Start', handler:this.onStart}
         }
         return(
-            <button className="ui button" onClick={button.handler}>{button.text}</button>
+            <button className={className} onClick={button.handler}>{button.text}</button>
         )
     }
 
     render() { 
         return (
             <div className="ui center aligned container" style={{padding:'5em'}} >
-                <h1 className="ui header center aligned">{delta_to_str(this.state.delta)}</h1>
+                <h1 className="ui center aligned header">{this.state.delta_str}</h1>
                 <div className="ui center aligned container">
-                    <div className="ui buttons center aligned">
+                    <div className="ui buttons">
                         {this.mainButton()}
-                        <button className={`ui button ${!this.state.on ? 'disabled': ''}`} onClick={this.onPause}>Pause</button>
-                        <button className={`ui button ${this.state.delta < 1000 ? 'disabled': ''}`} onClick={this.onBook}>Book</button>
+                        <button className={`ui button ${(!this.state.on || this.state.booking) ? 'disabled': ''}`} onClick={this.onPause}>Pause</button>
+                        <button className={`ui button ${(this.state.delta < 1000 || this.state.booking) ? 'disabled': ''}`} onClick={this.onBook}>Book</button>
                     </div>
                 </div>
+                <BookForm duration={this.state.booking_duration} />
             </div>
         );
     }

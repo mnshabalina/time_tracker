@@ -13,7 +13,7 @@ function setLeadingZero(int_num) {
     return int_num = int_num < 10 ? `0${int_num}` : `${int_num}`;
 }
 
-function milliSecTillMidnight(){
+export function milliSecTillMidnight(){
     const midnight = new Date();
     midnight.setHours(24,0,0,0);
     const milliSecs = midnight - new Date();
