@@ -1,4 +1,4 @@
-## Front end for Time Tracker app
+## Front end for Time Tracker app (WIP)
 
 ### To start the app
 
